@@ -85,6 +85,9 @@ private object SimpleFormatter {
 
 }
 
+/**
+ * A simple [[com.dongxiguo.zeroLog.formatters.Formatter]] implementation.
+ */
 abstract class SimpleFormatter(loggerNameInitial: => String)
 extends Formatter with Logged {
   import SimpleFormatter._
@@ -103,14 +106,15 @@ extends Formatter with Logged {
 
   private def writeTime(buffer: StringBuilder) {
     val now = Calendar.getInstance
-    import now._
+    import now.get
     import Calendar._
-    buffer appendZeroFilled (get(YEAR), 4) append '-' appendZeroFilled
-    (get(MONTH) + 1, 2) append '-' appendZeroFilled
-    (get(DATE), 2) append ' ' appendZeroFilled
-    (get(HOUR_OF_DAY), 2) append ':' appendZeroFilled
-    (get(MINUTE), 2) append ':' appendZeroFilled
-    (get(SECOND), 2) append ' '
+    buffer appendZeroFilled
+      (get(YEAR), 4) append '-' appendZeroFilled
+      (get(MONTH) + 1, 2) append '-' appendZeroFilled
+      (get(DATE), 2) append ' ' appendZeroFilled
+      (get(HOUR_OF_DAY), 2) append ':' appendZeroFilled
+      (get(MINUTE), 2) append ':' appendZeroFilled
+      (get(SECOND), 2) append ' '
   }
 
   private def writeHead(buffer: StringBuilder, level: Level) {
@@ -119,14 +123,15 @@ extends Formatter with Logged {
       loggerName() append System.lineSeparator append level.name append ": "
   }
 
-  implicit override final def formatMessageWithThrown[U](
-    pair: (StringBuilder => U, Throwable)) = { (buffer: StringBuilder) =>
+  implicit override final def pairToAppendee[A](
+    pair: (A, Throwable))(implicit converter: A => Appendee) = { (buffer: StringBuilder) =>
     val (message, thrown) = pair
-    message(buffer)
+    converter(message)(buffer)
     thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
-  implicit override final def formatThrown(thrown: Throwable) = { (buffer: StringBuilder) =>
+  implicit override final def thrownToAppendee(thrown: Throwable) = {
+    (buffer: StringBuilder) =>
     thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 

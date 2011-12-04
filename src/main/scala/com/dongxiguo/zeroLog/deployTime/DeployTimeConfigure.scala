@@ -29,12 +29,21 @@ private object DeployTimeConfigure {
   private def defaultLogger[Scope <: AnyRef](
     scope: Scope): (Logger, Formatter) =
       (Filter.Info, new SimpleFormatter(scope) with ConsoleLogger)
+
 }
 
+/**
+ * Any object mixes-in <code>DeployTimeConfigure</code> will bind zero-log
+ * configure at deploy time instead of compile time.
+ * 
+ */
 trait DeployTimeConfigure {
   import DeployTimeConfigure._
   import DeployTimeConfigure.formatter._
 
+  /**
+   * @return A proxy which finds zero-log configure using reflect.
+   */
   final def ZeroLoggerFactory = new {
     final def newLogger[Scope <: AnyRef : Manifest](scope: Scope) = {
       try {

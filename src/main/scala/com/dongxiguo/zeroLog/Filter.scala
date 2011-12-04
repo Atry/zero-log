@@ -21,7 +21,7 @@ package com.dongxiguo.zeroLog
 import scala.annotation.elidable
 
 /**
- * Factory of filters.
+ * Factory of [[com.dongxiguo.zeroLog.Logger]]s which will filter logs by level.
  */
 object Filter {
 

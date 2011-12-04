@@ -23,29 +23,25 @@ import com.dongxiguo.zeroLog.Appendee
 /**
  * A <code>Formatter</code> provides support for formatting logs.
  * Formatting a log consists of three steps:
- *   1. Convert various parameters to [[com.dongxiguo.zeroLog.Appendee]].
- *   1. If the [[com.dongxiguo.zeroLog.Logger]] decide to print log,
+ *   1. <code>Formatter</code> converts various parameters to [[com.dongxiguo.zeroLog.Appendee]].
+ *   1. If the [[com.dongxiguo.zeroLog.Logger]] decided to print log,
  *   <code>Formatter.log(Appendee,Level)</code> is called to make final log
  *   text.
- *   1. <code>Formatter</code> pass final log text to the
+ *   1. <code>Formatter</code> passes final log text to the
  *   [[scala.util.logging.Logged]] implemetation which <code>Formatter</code>
  *   mixed in.
  */
 trait Formatter {
 
-  implicit def toAppendee(message: String): Appendee =
-  { _.append(message) }
+  implicit def stringToAppendee(message: String): Appendee =
+    { _.append(message) }
 
-  implicit def toAppendeeWithThrown(
-    pair: (String, Throwable)): Appendee = {
-    val (message, thrown) = pair
-    formatMessageWithThrown[Unit](message, thrown)
-  }
+  implicit def pairToAppendee[A](pair: (A, Throwable))(implicit converter: A => Appendee): Appendee
 
-  implicit def formatMessageWithThrown[U](
-    pair: (StringBuilder => U, Throwable)): Appendee
+  implicit def functionToAppendee[U](appendee: StringBuilder => U): Appendee =
+    { (buffer: StringBuilder) => val _ = appendee(buffer) }
 
-  implicit def formatThrown(thrown: Throwable): Appendee
+  implicit def thrownToAppendee(thrown: Throwable): Appendee
 
   implicit def log(content: Appendee, level: Level)
 }

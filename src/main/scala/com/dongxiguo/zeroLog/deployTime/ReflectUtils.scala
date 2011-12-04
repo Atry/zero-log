@@ -21,7 +21,7 @@ package deployTime
 import java.lang.reflect.Method
 import scala.annotation.tailrec
 
-object ReflectUtils {
+private[deployTime] object ReflectUtils {
   // Eat my own dog food
   private val (logger, formatter) = ZeroLoggerFactory.newLogger(this)
   import formatter._
