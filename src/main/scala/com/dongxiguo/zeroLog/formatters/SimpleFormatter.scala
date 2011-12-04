@@ -1,3 +1,4 @@
+// vim: expandtab shiftwidth=2 softtabstop=2
 /*
  * Copyright 2011 杨博 (Yang Bo)
  * 
@@ -115,7 +116,7 @@ extends Formatter with Logged {
   private def writeHead(buffer: StringBuilder, level: Level) {
     writeTime(buffer)
     buffer append
-    loggerName() append System.lineSeparator append level.name append ": "
+      loggerName() append System.lineSeparator append level.name append ": "
   }
 
   implicit override final def formatMessageWithThrown[U](
@@ -129,7 +130,7 @@ extends Formatter with Logged {
     thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
-  implicit override final def log(content: StringBuilder => Unit, level: Level) {
+  implicit override final def log(content: Appendee, level: Level) {
     val buffer = new StringBuilder
     writeHead(buffer, level)
     content(buffer)

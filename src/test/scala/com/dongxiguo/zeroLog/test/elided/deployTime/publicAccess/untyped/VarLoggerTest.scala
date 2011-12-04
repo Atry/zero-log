@@ -1,3 +1,4 @@
+// vim: expandtab shiftwidth=2 softtabstop=2
 /*
  * Copyright 2011 杨博 (Yang Bo)
  * 
@@ -83,7 +84,7 @@ class VarLoggerTest {
 
   @Test
   def test = {
-    print("zero-log spends "); print(0 until 5 map { VarLoggerTest.doTest(math.random, _) } reduce { math.min(_, _) } toString()); println(" nanoseconds per log.")
+    print("zero-log spends "); print(0 until 5 map { VarLoggerTest.doTest(math.random, _) } min); println(" nanoseconds per log.")
   }
 
 }

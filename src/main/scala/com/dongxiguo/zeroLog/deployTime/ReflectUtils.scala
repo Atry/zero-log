@@ -1,3 +1,4 @@
+// vim: expandtab shiftwidth=2 softtabstop=2
 /*
  * Copyright 2011 杨博 (Yang Bo)
  * 

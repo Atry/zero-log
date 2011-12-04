@@ -1,3 +1,4 @@
+// vim: expandtab shiftwidth=2 softtabstop=2
 /*
  * Copyright 2011 杨博 (Yang Bo)
  * 
@@ -19,8 +20,8 @@ import com.dongxiguo.zeroLog.formatters.SimpleFormatter
 import scala.util.logging.ConsoleLogger
 
 package com.dongxiguo.zeroLog {
-  object ZeroLoggerFactory {
-    def newLogger(a: AnyRef) =
-      (Filter.Info, new SimpleFormatter(a) with ConsoleLogger)
+  private[zeroLog] object ZeroLoggerFactory {
+    def newLogger(singleton: AnyRef) =
+      (Filter.Info, new SimpleFormatter(singleton) with ConsoleLogger)
   }
 }
