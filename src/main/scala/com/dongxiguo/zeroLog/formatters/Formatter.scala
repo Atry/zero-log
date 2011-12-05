@@ -36,7 +36,8 @@ trait Formatter {
   implicit def stringToAppendee(message: String): Appendee =
     { _.append(message) }
 
-  implicit def pairToAppendee[A](pair: (A, Throwable))(implicit converter: A => Appendee): Appendee
+  implicit def pairToAppendee[A](
+    pair: (A, Throwable))(implicit converter: A => Appendee): Appendee
 
   implicit def functionToAppendee[U](appendee: StringBuilder => U): Appendee =
     { (buffer: StringBuilder) => val _ = appendee(buffer) }

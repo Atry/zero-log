@@ -19,7 +19,9 @@ package com.dongxiguo.zeroLog
 
 import scala.annotation.elidable
 
-
+/**
+ * Facade of zero-log.
+ */
 abstract class Logger private[zeroLog]() extends Logger.NonElidableLogger {
 
   @elidable(elidable.FINEST)
@@ -68,58 +70,58 @@ abstract class Logger private[zeroLog]() extends Logger.NonElidableLogger {
 object Logger {
   sealed abstract class NonElidableLogger {
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Finest]] level.
-   */
-  def finest(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Finest]] level.
+     */
+    def finest(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Finest)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Finer]] level.
-   */
-  def finer(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Finer]] level.
+     */
+    def finer(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Finer)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Fine]] level.
-   */
-  def fine(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Fine]] level.
+     */
+    def fine(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Fine)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Config]] level.
-   */
-  def config(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Config]] level.
+     */
+    def config(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Config)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Info]] level.
-   */
-  def info(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Info]] level.
+     */
+    def info(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Info)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Warning]] level.
-   */
-  def warning(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Warning]] level.
+     */
+    def warning(appendee: => Appendee)(
+        implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Warning)
     }
 
-  /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Severe]] level.
-   */
-  def severe(appendee: => Appendee)(
+    /**
+     * Print log at [[com.dongxiguo.zeroLog.Level.Severe]] level.
+     */
+    def severe(appendee: => Appendee)(
       implicit formatter: (Appendee, Level) => Unit) {
       formatter(appendee, Level.Severe)
     }

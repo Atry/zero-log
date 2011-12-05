@@ -124,15 +124,16 @@ extends Formatter with Logged {
   }
 
   implicit override final def pairToAppendee[A](
-    pair: (A, Throwable))(implicit converter: A => Appendee) = { (buffer: StringBuilder) =>
-    val (message, thrown) = pair
-    converter(message)(buffer)
-    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
+    pair: (A, Throwable))(implicit converter: A => Appendee) = {
+    buffer: StringBuilder =>
+      val (message, thrown) = pair
+      converter(message)(buffer)
+      thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
   implicit override final def thrownToAppendee(thrown: Throwable) = {
-    (buffer: StringBuilder) =>
-    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
+    buffer: StringBuilder =>
+      thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
   implicit override final def log(content: Appendee, level: Level) {
