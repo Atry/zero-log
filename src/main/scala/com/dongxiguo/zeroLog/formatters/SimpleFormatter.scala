@@ -21,6 +21,7 @@ import java.io.PrintWriter
 import java.io.Writer
 import java.util.Calendar
 import scala.util.logging.Logged
+import scala.compat.Platform
 
 private object SimpleFormatter {
 
@@ -120,7 +121,7 @@ extends Formatter with Logged {
   private def writeHead(buffer: StringBuilder, level: Level) {
     writeTime(buffer)
     buffer append
-      loggerName() append System.lineSeparator append level.name append ": "
+      loggerName() append Platform.EOL append level.name append ": "
   }
 
   implicit override final def pairToAppendee[A](
