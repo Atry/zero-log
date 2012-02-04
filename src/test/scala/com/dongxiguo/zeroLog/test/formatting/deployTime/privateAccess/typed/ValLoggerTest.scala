@@ -19,11 +19,11 @@ package com.dongxiguo.zeroLog.test.formatting
 package deployTime.privateAccess.typed
 
 import com.dongxiguo.zeroLog.Logger
-import com.dongxiguo.zeroLog.deployTime.DeployTimeConfigure
+
 import org.junit._
 import Assert._
-private object ValLoggerTest extends DeployTimeConfigure {
-  private val (logger: Logger, formatter) = ZeroLoggerFactory.newLogger(this)
+private object ValLoggerTest {
+  private val (logger: Logger, formatter) = com.dongxiguo.zeroLog.deployTime.ReflectiveZeroLoggerFactory.newLogger(this)
   import formatter._
 
   private def doTest(p1: Double, p2: Int) = {

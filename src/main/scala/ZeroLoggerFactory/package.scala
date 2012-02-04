@@ -15,22 +15,9 @@
  * limitations under the License.
  */
 
-import com.dongxiguo.zeroLog.Filter
-import com.dongxiguo.zeroLog.formatters.SimpleFormatter
-import scala.util.logging.ConsoleLogger
-import scala.util.logging.Logged
+import com.dongxiguo.zeroLog.deployTime.ReflectiveZeroLoggerFactory
 
-package com.dongxiguo.zeroLog.test {
-  package elided {
-    private[elided] object ZeroLoggerFactory {
-      final def newLogger(singleton: Singleton) =
-        (Filter.Info, new SimpleFormatter(singleton) with ConsoleLogger)
-    }
-  }
-  package formatting {
-    private[formatting] object ZeroLoggerFactory {
-      final def newLogger(singleton: Singleton) =
-        (Filter.All, new SimpleFormatter(singleton) with Logged)
-    }
-  }
+package object ZeroLoggerFactory {
+  final def newLogger[Scope <: AnyRef with Singleton : Manifest](scope: Scope) =
+    ReflectiveZeroLoggerFactory.newLogger(scope)
 }

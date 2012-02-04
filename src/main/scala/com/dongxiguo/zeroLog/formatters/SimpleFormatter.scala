@@ -96,7 +96,7 @@ extends Formatter with Logged {
   private var loggerName: Function0[String] =
     createLazy(loggerName_=, loggerNameInitial)
 
-  final def this(singleton: AnyRef) = this {
+  final def this(singleton: Singleton) = this {
     singleton.getClass.getCanonicalName match {
       case SimpleFormatter.SingletonPattern(className) => className
       case _ =>

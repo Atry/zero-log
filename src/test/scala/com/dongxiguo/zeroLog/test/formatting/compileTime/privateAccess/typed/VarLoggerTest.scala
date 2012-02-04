@@ -19,7 +19,7 @@ package com.dongxiguo.zeroLog.test.formatting
 package compileTime.privateAccess.typed
 
 import com.dongxiguo.zeroLog.Logger
-import com.dongxiguo.zeroLog.deployTime.DeployTimeConfigure
+
 import org.junit._
 import Assert._
 private object VarLoggerTest {

@@ -21,7 +21,7 @@ import scala.util.logging.ConsoleLogger
 
 package com.dongxiguo.zeroLog {
   private[zeroLog] object ZeroLoggerFactory {
-    def newLogger(singleton: AnyRef) =
+    def newLogger(singleton: Singleton) =
       (Filter.Info, new SimpleFormatter(singleton) with ConsoleLogger)
   }
 }
