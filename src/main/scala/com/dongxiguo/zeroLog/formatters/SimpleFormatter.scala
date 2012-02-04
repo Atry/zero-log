@@ -93,6 +93,8 @@ abstract class SimpleFormatter(loggerNameInitial: => String)
 extends Formatter with Logged {
   import SimpleFormatter._
 
+  override def log(s: String)
+
   private var loggerName: Function0[String] =
     createLazy(loggerName_=, loggerNameInitial)
 

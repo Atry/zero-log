@@ -30,7 +30,9 @@ package com.dongxiguo.zeroLog.test {
   package formatting {
     private[formatting] object ZeroLoggerFactory {
       final def newLogger(singleton: Singleton) =
-        (Filter.All, new SimpleFormatter(singleton) with Logged)
+        (Filter.All, new SimpleFormatter(singleton) {
+          override final def log(s: String) {}
+        })
     }
   }
 }
