@@ -28,8 +28,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.FINEST)
   def finest(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Finest)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Finest)
   }
 
   /**
@@ -37,8 +37,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.FINER)
   def finer(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Finer)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Finer)
   }
 
   /**
@@ -46,8 +46,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.FINE)
   def fine(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Fine)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Fine)
   }
 
   /**
@@ -55,8 +55,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.CONFIG)
   def config(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Config)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Config)
   }
 
   /**
@@ -64,8 +64,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.INFO)
   def info(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Info)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Info)
   }
 
   /**
@@ -73,8 +73,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.WARNING)
   def warning(appendee: => Appendee)(
-      implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Warning)
+      implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Warning)
   }
 
   /**
@@ -82,8 +82,8 @@ abstract class Logger private[zeroLog]() {
    */
   @elidable(elidable.SEVERE)
   def severe(appendee: => Appendee)(
-    implicit formatter: (Appendee, Level) => Unit) {
-    formatter(appendee, Level.Severe)
+    implicit log: (Appendee, Level) => Unit) {
+    log(appendee, Level.Severe)
   }
 
 }
