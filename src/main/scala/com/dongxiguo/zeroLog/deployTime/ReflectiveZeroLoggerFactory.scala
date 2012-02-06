@@ -39,7 +39,7 @@ object ReflectiveZeroLoggerFactory {
   /**
    * @return A logger which is located by reflection.
    */
-  final def newLogger[Scope <: AnyRef with Singleton : Manifest](scope: Scope) = {
+  final def newLogger[Scope <: AnyRef with Singleton](scope: Scope) = {
     if (isRunning.get) {
       logger.config("No ZeroLoggerFactory is found, use defaultLogger.")
       defaultLogger(scope)

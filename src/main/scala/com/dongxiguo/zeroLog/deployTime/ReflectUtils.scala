@@ -91,13 +91,13 @@ private[deployTime] object ReflectUtils {
     }
   }
 
-  final def invokeStatic[Parameter <: AnyRef : Manifest](
+  final def invokeStatic[Parameter <: AnyRef](
     packageName: String, className: String, methodName: String,
     parameter: Parameter): AnyRef = {
     findBestMatchingStaticMethod(
       searchClass(packageName, className),
       methodName,
-      manifest[Parameter].erasure).invoke(null, parameter)
+      parameter.getClass).invoke(null, parameter)
   }
 
 }
