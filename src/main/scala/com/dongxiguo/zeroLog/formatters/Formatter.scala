@@ -34,7 +34,7 @@ import com.dongxiguo.zeroLog.Appendee
 trait Formatter {
 
   implicit def stringToAppendee(message: String): Appendee =
-    { _.append(message) }
+    { _.++=(message) }
 
   implicit def pairToAppendee[A](
     pair: (A, Throwable))(implicit converter: A => Appendee): Appendee

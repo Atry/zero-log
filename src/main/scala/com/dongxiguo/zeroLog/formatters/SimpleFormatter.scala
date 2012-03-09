@@ -26,45 +26,39 @@ import scala.compat.Platform
 private object SimpleFormatter {
 
   private val SingletonPattern = """^(.*)\$$"""r
-
-  final class ZeroFilledIntAppender(sb: StringBuilder) {
-    final def appendZeroFilled(n: Int, minSize: Int): StringBuilder = {
+  
+  final class ZeroFilledInt(n: Int, minSize: Int, radix: Int = 10) extends Traversable[Char] {
+    override final def foreach[U](f: Char => U) {
       assert(minSize >= 0)
       assert(n >= 0)
       var zeros = minSize
       var i = 1
       var t = n
       while(i < t) {
-        if (i == 100000000) {
+        if (i != 100000000) {
+          i *= 10
+          zeros -= 1
+        } else {
           while (i != 1) {
-            sb.append(('0' + (t / i)).asInstanceOf[Char])
+            f(java.lang.Character.forDigit(t / i, radix))
             t %= i
             i /= 10
           }
-          return sb.append(('0' + t).asInstanceOf[Char])
-        } else {
-          i *= 10
-          zeros -= 1
+          f(java.lang.Character.forDigit(t, radix))
+          return
         }
       }
       while (zeros > 0) {
-        sb.append('0')
+        f('0')
         zeros -= 1
       }
       while (i > 1) {
         i /= 10
-        sb.append(('0' + (t / i)).asInstanceOf[Char])
+        f(java.lang.Character.forDigit(t / i, radix))
         t %= i
       }
-      sb
     }
   }
-
-  /**
-   * Convert Int to String, like {{{ n.formatted("%04d") }}}
-   */
-  implicit private def toZeroFilledIntAppender(sb:StringBuilder) =
-    new ZeroFilledIntAppender(sb)
 
   private final def toWriter(sb: StringBuilder) = new Writer {
     override final def close() {}
@@ -73,7 +67,7 @@ private object SimpleFormatter {
       sb.appendAll(cbuf, off, len)
     }
     override final def write(c: Int) {
-      sb.append(c.asInstanceOf[Char])
+      sb += c.asInstanceOf[Char]
     }
   }
 
@@ -99,7 +93,7 @@ extends Formatter with Logged {
     createLazy(loggerName_=, loggerNameInitial)
 
   final def this(singleton: Singleton) = this {
-    singleton.getClass.getCanonicalName match {
+    singleton.asInstanceOf[AnyRef].getClass.getCanonicalName match {
       case SimpleFormatter.SingletonPattern(className) => className
       case _ =>
         throw new IllegalArgumentException(
@@ -111,32 +105,33 @@ extends Formatter with Logged {
     val now = Calendar.getInstance
     import now.get
     import Calendar._
-    buffer appendZeroFilled
-      (get(YEAR), 4) append '-' appendZeroFilled
-      (get(MONTH) + 1, 2) append '-' appendZeroFilled
-      (get(DATE), 2) append ' ' appendZeroFilled
-      (get(HOUR_OF_DAY), 2) append ':' appendZeroFilled
-      (get(MINUTE), 2) append ':' appendZeroFilled
-      (get(SECOND), 2) append ' '
+    buffer ++=
+    new ZeroFilledInt(get(YEAR), 4) += '-' ++=
+    new ZeroFilledInt(get(MONTH) + 1, 2) += '-' ++=
+    new ZeroFilledInt(get(DATE), 2) += ' ' ++=
+    new ZeroFilledInt(get(HOUR_OF_DAY), 2) += ':' ++=
+    new ZeroFilledInt(get(MINUTE), 2) += ':' ++=
+    new ZeroFilledInt(get(SECOND), 2) += ' '
   }
 
   private def writeHead(buffer: StringBuilder, level: Level) {
     writeTime(buffer)
-    buffer append
-      loggerName() append Platform.EOL append level.name append ": "
+    buffer ++=
+    loggerName() ++= Platform.EOL ++= level.name ++= ": "
   }
 
   implicit override final def pairToAppendee[A](
     pair: (A, Throwable))(implicit converter: A => Appendee) = {
     buffer: StringBuilder =>
-      val (message, thrown) = pair
-      converter(message)(buffer)
-      thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
+    val (message, thrown) = pair
+    converter(message)(buffer)
+    buffer += ' '
+    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
   implicit override final def thrownToAppendee(thrown: Throwable) = {
     buffer: StringBuilder =>
-      thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
+    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
   }
 
   implicit override final def log(content: Appendee, level: Level) {

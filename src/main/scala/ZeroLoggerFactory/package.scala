@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import com.dongxiguo.zeroLog.deployTime.ReflectiveZeroLoggerFactory
+import com.dongxiguo.zeroLog.runTime.RunTimeZeroLoggerFactory
 
 package object ZeroLoggerFactory {
-  final def newLogger[Scope <: AnyRef with Singleton : Manifest](scope: Scope) =
-    ReflectiveZeroLoggerFactory.newLogger(scope)
+  final def newLogger[Scope <: Singleton](scope: Scope) =
+    RunTimeZeroLoggerFactory.newLogger(scope)
 }
