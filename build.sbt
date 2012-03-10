@@ -6,9 +6,11 @@ organization := "com.dongxiguo"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-crossScalaVersions := Seq("2.8.0", "2.8.1", "2.9.1", "2.10.0-M2")
+crossScalaVersions := Seq("2.8.0", "2.8.1", "2.8.2", "2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.10.0-M2")
 
-version := "0.1-SNAPSHOT"
+version := "0.1.0"
+
+publishTo := Some(Resolver.file("Google Code", file("../zero-log.maven")))
 
 pomExtra <<= scalaVersion { sv =>
   <properties>
