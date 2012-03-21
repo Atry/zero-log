@@ -4,6 +4,8 @@ name := "zero-log"
 
 organization := "com.dongxiguo"
 
+organizationHomepage := None
+
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
 crossScalaVersions :=
@@ -20,15 +22,13 @@ publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
     Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 }
 
+licenses := Seq(
+  "Apache License, Version 2.0" ->
+  url("http://www.apache.org/licenses/LICENSE-2.0.html"))
+
+homepage := Some(url("https://code.google.com/p/zero-log/"))
+
 pomExtra <<= scalaVersion { sv =>
-  <url>https://code.google.com/p/zero-log/</url>
-  <licenses>
-    <license>
-      <name>Apache License, Version 2.0</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
   <scm>
     <url>https://code.google.com/p/zero-log/source/browse</url>
     <connection>scm:hg:https://code.google.com/p/zero-log/</connection>
