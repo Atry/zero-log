@@ -11,7 +11,7 @@ crossScalaVersions :=
       "2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1",
       "2.10.0-M1", "2.10.0-M2")
 
-version := "0.1.1"
+version := "0.1.2-SNAPSHOT"
 
 publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
   if (isSnapshot)
