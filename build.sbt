@@ -6,13 +6,39 @@ organization := "com.dongxiguo"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-crossScalaVersions := Seq("2.8.0", "2.8.1", "2.8.2", "2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.10.0-M2")
+crossScalaVersions :=
+  Seq("2.8.0", "2.8.1", "2.8.2",
+      "2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1",
+      "2.10.0-M1", "2.10.0-M2")
 
-version := "0.1.0"
+version := "0.1.1"
 
-publishTo := Some(Resolver.file("Google Code", file("../zero-log.maven")))
+publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
+  if (isSnapshot)
+    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") 
+  else
+    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+}
 
 pomExtra <<= scalaVersion { sv =>
+  <url>https://code.google.com/p/zero-log/</url>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://code.google.com/p/zero-log/source/browse</url>
+    <connection>scm:hg:https://code.google.com/p/zero-log/</connection>
+  </scm>
+  <developers>
+    <developer>
+      <id>Atry</id>
+      <name>杨博</name>
+    </developer>
+  </developers>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>{sv}</scala.version>
