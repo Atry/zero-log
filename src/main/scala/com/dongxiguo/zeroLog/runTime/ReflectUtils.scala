@@ -42,7 +42,7 @@ private[runTime] object ReflectUtils {
             logger.fine{ _ ++= packageName += '.' ++= className ++=
                         " is not found.  Will try its parent." }
         }
-        searchClass(parentPackageName, className)
+        return searchClass(parentPackageName, className)
       case _ =>
         throw new IllegalArgumentException("Bad package name: " + packageName)
     }
