@@ -36,7 +36,7 @@ private[runTime] object ReflectUtils {
         Class.forName(className)
       case ParentPackagePattern(parentPackageName) =>
         try {
-          return Class.forName(packageName + "." + className)
+          Class.forName(packageName + "." + className)
         } catch {
           case e: ClassNotFoundException =>
             logger.fine{ _ ++= packageName += '.' ++= className ++=
