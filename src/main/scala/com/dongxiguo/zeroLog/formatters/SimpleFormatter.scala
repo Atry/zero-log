@@ -27,24 +27,25 @@ private object SimpleFormatter {
 
   private val SingletonPattern = """^(.*)\$$"""r
   
-  final class ZeroFilledInt(n: Int, minSize: Int, radix: Int = 10) extends Traversable[Char] {
+  private final class ZeroFilledInt(n: Int, minSize: Int)
+  extends Traversable[Char] {
     override final def foreach[U](f: Char => U) {
       assert(minSize >= 0)
       assert(n >= 0)
       var zeros = minSize
       var i = 1
       var t = n
-      while(i < t) {
+      while(i <= t) {
         if (i != 100000000) {
           i *= 10
           zeros -= 1
         } else {
           while (i != 1) {
-            f(java.lang.Character.forDigit(t / i, radix))
+            f(java.lang.Character.forDigit(t / i, 10))
             t %= i
             i /= 10
           }
-          f(java.lang.Character.forDigit(t, radix))
+          f(java.lang.Character.forDigit(t, 10))
           return
         }
       }
@@ -54,7 +55,7 @@ private object SimpleFormatter {
       }
       while (i > 1) {
         i /= 10
-        f(java.lang.Character.forDigit(t / i, radix))
+        f(java.lang.Character.forDigit(t / i, 10))
         t %= i
       }
     }
