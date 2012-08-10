@@ -11,7 +11,7 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->defau
 crossScalaVersions :=
   Seq("2.8.0", "2.8.1", "2.8.2",
       "2.9.0", "2.9.0-1", "2.9.1", "2.9.1-1", "2.9.2",
-      "2.10.0-M1", "2.10.0-M2", "2.10.0-M3", "2.10.0-M4")
+      "2.10.0-M1", "2.10.0-M2", "2.10.0-M3")
 
 version := "0.1.3-SNAPSHOT"
 

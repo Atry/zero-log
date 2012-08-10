@@ -36,11 +36,11 @@ private[runTime] object ReflectUtils {
         Class.forName(className)
       case ParentPackagePattern(parentPackageName) =>
         try {
-          Class.forName(packageName + "." + className)
+          return Class.forName(packageName + "." + className)
         } catch {
           case e: ClassNotFoundException =>
-            logger.fine{ _ ++= packageName += '.' ++= className ++=
-                        " is not found.  Will try its parent." }
+            logger.finer{ _ ++= packageName += '.' ++= className ++=
+                         " is not found.  Will try its parent." }
         }
         return searchClass(parentPackageName, className)
       case _ =>
@@ -95,6 +95,10 @@ private[runTime] object ReflectUtils {
   final def invokeStatic(
     packageName: String, className: String, methodName: String,
     parameter: AnyRef): AnyRef = {
+    logger.fine {
+      _ ++= "Invoke static method by reflection: " ++=
+        className += '.' ++= methodName += '(' ++= parameter.toString ++=
+        ") at " ++= packageName += '.' }
     findBestMatchingStaticMethod(
       searchClass(packageName, className),
       methodName,
