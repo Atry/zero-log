@@ -84,7 +84,7 @@ private[runTime] object ReflectUtils {
     } match {
       case Array() =>
         throw new NoSuchMethodException(
-          "No method in " + clazz + " for " + parameterTypes)
+          "No method in " + clazz + " for " + parameterTypes.mkString(","))
       case Array(onlyOne) => onlyOne
       case multipleMethods =>
         throw new NoSuchMethodException(
