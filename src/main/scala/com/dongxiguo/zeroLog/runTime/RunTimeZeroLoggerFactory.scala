@@ -18,17 +18,19 @@
 package com.dongxiguo.zeroLog
 package runTime
 
-import com.dongxiguo.zeroLog.formatters.Formatter
+import com.dongxiguo.zeroLog.Formatter
 import com.dongxiguo.zeroLog.formatters.SimpleFormatter
-import scala.util.logging.ConsoleLogger
+import com.dongxiguo.zeroLog.appenders.ConsoleAppender
+import com.dongxiguo.fastring.Fastring.Implicits._
+import com.dongxiguo.fastring.Fastring
 
 object RunTimeZeroLoggerFactory {
   // Eat my own dog food.
-  private val (logger, formatter) = ZeroLoggerFactory.newLogger(this)
-  import formatter._
+  implicit private val (logger, formatter, appender) =
+    ZeroLoggerFactory.newLogger(this)
 
-  private def defaultLogger(singleton: Singleton): (Logger, Formatter) = {
-      (Filter.Info, new SimpleFormatter(singleton) with ConsoleLogger)
+  private def defaultLogger(singleton: Singleton): (Logger, Formatter, Appender) = {
+    (Filter.Info, SimpleFormatter, ConsoleAppender)
   }
 
   val isRunning = new ThreadLocal[java.lang.Boolean] {
@@ -38,7 +40,7 @@ object RunTimeZeroLoggerFactory {
   /**
    * @return A logger which is located by reflection.
    */
-  final def newLogger(singleton: Singleton) = {
+  final def newLogger(singleton: Singleton): (Logger, Formatter, Appender) = {
     if (isRunning.get.booleanValue) {
       logger.config("No ZeroLoggerFactory is found, use defaultLogger.")
       defaultLogger(singleton)
@@ -55,10 +57,8 @@ object RunTimeZeroLoggerFactory {
             packageName,
             "ZeroLoggerFactory",
             "newLogger",
-            singleton.asInstanceOf[AnyRef]).asInstanceOf[(Logger, Formatter)]
-        logger.config { _ ++= "Best matched configuration is " ++=
-                       "{logger=" ++= result._1.toString ++=
-                       ",formatter=" ++= result._2.toString += ')' }
+            singleton.asInstanceOf[AnyRef]).asInstanceOf[(Logger, Formatter, Appender)]
+        logger.config(fast"Best matched configuration is {logger=${result._1},formatter=${result._2})")
         result
       } catch {
         case _: ClassNotFoundException =>

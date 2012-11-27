@@ -17,129 +17,120 @@
 
 package com.dongxiguo.zeroLog
 package formatters
+
 import java.io.PrintWriter
 import java.io.Writer
 import java.util.Calendar
-import scala.util.logging.Logged
 import scala.compat.Platform
+import scala.language.implicitConversions
+import scala.util.logging.Logged
+import com.dongxiguo.zeroLog.context.CurrentClass
+import com.dongxiguo.zeroLog.context.CurrentLine
+import com.dongxiguo.zeroLog.context.CurrentMethodName
+import com.dongxiguo.zeroLog.context.CurrentSource
+import com.dongxiguo.fastring.Fastring
+import com.dongxiguo.fastring.Fastring.Implicits._
 
-private object SimpleFormatter {
+/**
+ * A simple [[com.dongxiguo.zeroLog.Formatter]] implementation.
+ */
+final object SimpleFormatter extends Formatter {
 
-  private val SingletonPattern = """^(.*)\$$"""r
-  
-  private final class ZeroFilledInt(n: Int, minSize: Int)
-  extends Traversable[Char] {
-    override final def foreach[U](f: Char => U) {
-      assert(minSize >= 0)
-      assert(n >= 0)
-      var zeros = minSize
-      var i = 1
-      var t = n
-      while(i <= t) {
-        if (i != 100000000) {
-          i *= 10
-          zeros -= 1
-        } else {
-          while (i != 1) {
-            f(java.lang.Character.forDigit(t / i, 10))
-            t %= i
-            i /= 10
-          }
-          f(java.lang.Character.forDigit(t, 10))
-          return
-        }
-      }
-      while (zeros > 0) {
-        f('0')
-        zeros -= 1
-      }
-      while (i > 1) {
-        i /= 10
-        f(java.lang.Character.forDigit(t / i, 10))
-        t %= i
-      }
-    }
-  }
+  private val SingletonPattern = """^(.*)\$$""".r
 
-  private final def toWriter(sb: StringBuilder) = new Writer {
-    override final def close() {}
-    override final def flush() {}
-    override final def write(cbuf: Array[Char], off: Int, len: Int) {
-      sb.appendAll(cbuf, off, len)
-    }
-    override final def write(c: Int) {
-      sb += c.asInstanceOf[Char]
-    }
-  }
-
-  private final def createLazy(setter: Function0[String] => Unit,
-                               initial: => String) = { () =>
+  private def createLazy(setter: Function0[String] => Unit,
+    initial: => String) = { () =>
     val result = initial
     setter { () => result }
     result
   }
 
-}
+  private final class PrintThrowable(throwable: Throwable) extends Fastring {
+    override final def foreach[U](visitor: String => U) {
+      val writer = new PrintWriter(new Writer {
+        override final def close() {}
+        override final def flush() {}
+        override final def write(buffer: Array[Char], offset: Int, length: Int) {
+          visitor(new String(buffer, offset, length))
+        }
 
-/**
- * A simple [[com.dongxiguo.zeroLog.formatters.Formatter]] implementation.
- */
-abstract class SimpleFormatter(loggerNameInitial: => String)
-extends Formatter with Logged {
-  import SimpleFormatter._
+        override final def write(char: Int) {
+          visitor(char.asInstanceOf[Char].toString)
+        }
 
-  override def log(s: String)
+        override final def write(string: String) {
+          visitor(string)
+        }
 
-  private var loggerName: Function0[String] =
-    createLazy(loggerName_=, loggerNameInitial)
-
-  final def this(singleton: Singleton) = this {
-    singleton.asInstanceOf[AnyRef].getClass.getCanonicalName match {
-      case SimpleFormatter.SingletonPattern(className) => className
-      case _ =>
-        throw new IllegalArgumentException(
-          singleton + " should be a singleton object.")
+        override final def write(string: String, offset: Int, length: Int) {
+          visitor(string.substring(offset, offset + length))
+        }
+      })
+      throwable.printStackTrace(writer)
+      writer.flush()
     }
   }
 
-  private def writeTime(buffer: StringBuilder) {
-    val now = Calendar.getInstance
-    import now.get
+  private def now: Fastring = {
+    val calendarNow = Calendar.getInstance
+    import calendarNow.get
     import Calendar._
-    buffer ++=
-    new ZeroFilledInt(get(YEAR), 4) += '-' ++=
-    new ZeroFilledInt(get(MONTH) + 1, 2) += '-' ++=
-    new ZeroFilledInt(get(DATE), 2) += ' ' ++=
-    new ZeroFilledInt(get(HOUR_OF_DAY), 2) += ':' ++=
-    new ZeroFilledInt(get(MINUTE), 2) += ':' ++=
-    new ZeroFilledInt(get(SECOND), 2) += ' '
+    fast"${
+      get(YEAR).filled(4, '0')
+    }-${
+      (get(MONTH) + 1).filled(2, '0')
+    }-${
+      get(DATE).filled(2, '0')
+    } ${
+      get(HOUR_OF_DAY).filled(2, ':')
+    }-${
+      get(MINUTE).filled(2, ':')
+    }-${
+      get(SECOND).filled(2, '0')
+    }"
   }
 
-  private def writeHead(buffer: StringBuilder, level: Level) {
-    writeTime(buffer)
-    buffer ++=
-    loggerName() ++= Platform.EOL ++= level.name ++= ": "
+  override final def format(
+    level: Level,
+    message: Fastring,
+    currentSource: CurrentSource,
+    currentLine: CurrentLine,
+    currentClass: CurrentClass,
+    currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
+    @inline
+    def methodName = currentMethodNameOption.getOrElse("<init>")
+    @inline
+    def sourceName = new java.io.File(currentSource.get).getName
+    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message"
   }
 
-  implicit override final def pairToAppendee[A](
-    pair: (A, Throwable))(implicit converter: A => Appendee) = {
-    buffer: StringBuilder =>
-    val (message, thrown) = pair
-    converter(message)(buffer)
-    buffer += ' '
-    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
+  override final def format[A](
+    level: Level,
+    message: Fastring,
+    throwable: Throwable,
+    currentSource: CurrentSource,
+    currentLine: CurrentLine,
+    currentClass: CurrentClass,
+    currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
+    @inline
+    def methodName = currentMethodNameOption.getOrElse("<init>")
+    @inline
+    def sourceName = new java.io.File(currentSource.get).getName
+    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message ${new PrintThrowable(throwable)}"
   }
 
-  implicit override final def thrownToAppendee(thrown: Throwable) = {
-    buffer: StringBuilder =>
-    thrown.printStackTrace(new PrintWriter(toWriter(buffer)))
-  }
-
-  implicit override final def log(content: Appendee, level: Level) {
-    val buffer = new StringBuilder
-    writeHead(buffer, level)
-    content(buffer)
-    log(buffer.toString)
+  override final def format(
+    level: Level,
+    throwable: Throwable,
+    currentSource: CurrentSource,
+    currentLine: CurrentLine,
+    currentClass: CurrentClass,
+    currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
+    @inline
+    def methodName = currentMethodNameOption.getOrElse("<init>")
+    @inline
+    def sourceName = new java.io.File(currentSource.get).getName
+    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: ${new PrintThrowable(throwable)}"
   }
 
 }

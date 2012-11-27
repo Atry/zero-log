@@ -16,8 +16,12 @@
  */
 
 import com.dongxiguo.zeroLog.runTime.RunTimeZeroLoggerFactory
+import com.dongxiguo.zeroLog.Appender
+import com.dongxiguo.zeroLog.Logger
+import com.dongxiguo.zeroLog.Formatter
 
 package object ZeroLoggerFactory {
-  final def newLogger[Scope <: Singleton](scope: Scope) =
+  final def newLogger[Scope <: Singleton](
+    scope: Scope): (Logger, Formatter, Appender) =
     RunTimeZeroLoggerFactory.newLogger(scope)
 }

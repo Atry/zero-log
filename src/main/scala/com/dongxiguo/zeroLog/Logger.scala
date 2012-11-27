@@ -18,72 +18,66 @@
 package com.dongxiguo.zeroLog
 
 import scala.annotation.elidable
+import com.dongxiguo.fastring.Fastring
 
 /**
- * Facade of zero-log.
+ * Facade of zero-withLevel.
  */
-abstract class Logger private[zeroLog]() {
+abstract class Logger private[zeroLog] () {
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Finest]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Finest]] level.
    */
   @elidable(elidable.FINEST)
-  def finest(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Finest)
+  def finest(logRecord: => LogRecord) {
+    logRecord.log(Level.Finest)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Finer]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Finer]] level.
    */
   @elidable(elidable.FINER)
-  def finer(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Finer)
+  def finer(logRecord: => LogRecord) {
+    logRecord.log(Level.Finer)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Fine]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Fine]] level.
    */
   @elidable(elidable.FINE)
-  def fine(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Fine)
+  def fine(logRecord: => LogRecord) {
+    logRecord.log(Level.Fine)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Config]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Config]] level.
    */
   @elidable(elidable.CONFIG)
-  def config(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Config)
+  def config(logRecord: => LogRecord) {
+    logRecord.log(Level.Config)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Info]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Info]] level.
    */
   @elidable(elidable.INFO)
-  def info(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Info)
+  def info(logRecord: => LogRecord) {
+    logRecord.log(Level.Info)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Warning]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Warning]] level.
    */
   @elidable(elidable.WARNING)
-  def warning(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Warning)
+  def warning(logRecord: => LogRecord) {
+    logRecord.log(Level.Warning)
   }
 
   /**
-   * Print log at [[com.dongxiguo.zeroLog.Level.Severe]] level.
+   * Print withLevel at [[com.dongxiguo.zeroLog.Level.Severe]] level.
    */
   @elidable(elidable.SEVERE)
-  def severe(appendee: => Appendee)(
-    implicit log: (Appendee, Level) => Unit) {
-    log(appendee, Level.Severe)
+  def severe(logRecord: => LogRecord) {
+    logRecord.log(Level.Severe)
   }
 
 }

@@ -17,32 +17,31 @@
 
 package com.dongxiguo.zeroLog
 
-
 import scala.annotation.elidable
+import com.dongxiguo.fastring.Fastring
 
 /**
  * Factory of [[com.dongxiguo.zeroLog.Logger]]s which will filter logs by level.
  */
-object Filter {
+final object Filter {
 
   /**
    * A [[com.dongxiguo.zeroLog.Logger]] which prints logs at any level.
    * @see scala.annotation.elidable.ALL
    */
-  object All extends Logger
+  final object All extends Logger
 
   /**
    * A [[com.dongxiguo.zeroLog.Logger]] which prints logs at any level.
    * @see scala.annotation.elidable.FINEST
    */
-  object Finest extends Logger
+  final object Finest extends Logger
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableFiner extends Logger {
-    override def finest(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def finest(logRecord: => LogRecord) {}
   }
 
   /**
@@ -53,8 +52,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def finest(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def finest(logRecord: => LogRecord) {}
   }
 
   /**
@@ -62,14 +60,13 @@ object Filter {
    * lower than finer.
    * @see scala.annotation.elidable.FINERT
    */
-  object Finer extends Finer
+  final object Finer extends Finer
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableFine extends Finer {
-    override def finer(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def finer(logRecord: => LogRecord) {}
   }
 
   /**
@@ -80,8 +77,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def finer(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def finer(logRecord: => LogRecord) {}
   }
 
   /**
@@ -89,14 +85,13 @@ object Filter {
    * lower than fine.
    * @see scala.annotation.elidable.FINE
    */
-  object Fine extends Fine
+  final object Fine extends Fine
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableConfig extends Fine {
-    override def fine(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def fine(logRecord: => LogRecord) {}
   }
 
   /**
@@ -107,8 +102,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def fine(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def fine(logRecord: => LogRecord) {}
   }
 
   /**
@@ -116,14 +110,13 @@ object Filter {
    * lower than config.
    * @see scala.annotation.elidable.CONFIG
    */
-  object Config extends Config
+  final object Config extends Config
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableInfo extends Config {
-    override def config(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def config(logRecord: => LogRecord) {}
   }
 
   /**
@@ -134,8 +127,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def config(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def config(logRecord: => LogRecord) {}
   }
 
   /**
@@ -143,14 +135,13 @@ object Filter {
    * lower than info.
    * @see scala.annotation.elidable.INFO
    */
-  object Info extends Info
+  final object Info extends Info
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableWarning extends Info {
-    override def info(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def info(logRecord: => LogRecord) {}
   }
 
   /**
@@ -161,8 +152,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def info(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def info(logRecord: => LogRecord) {}
   }
 
   /**
@@ -170,14 +160,13 @@ object Filter {
    * lower than warning.
    * @see scala.annotation.elidable.WARNING
    */
-  object Warning extends Warning
+  final object Warning extends Warning
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableSevere extends Warning {
-    override def warning(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def warning(logRecord: => LogRecord) {}
   }
 
   /**
@@ -188,8 +177,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def warning(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def warning(logRecord: => LogRecord) {}
   }
 
   /**
@@ -197,14 +185,13 @@ object Filter {
    * lower than severe.
    * @see scala.annotation.elidable.SEVERE
    */
-  object Severe extends Severe
+  final object Severe extends Severe
 
   /**
    * For internal use only. Cannot create or extend the class.
    */
   sealed abstract class NonElidableOff extends Severe {
-    override def severe(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override def severe(logRecord: => LogRecord) {}
   }
 
   /**
@@ -215,8 +202,7 @@ object Filter {
      * Do nothing since it's below the Logger's level.
      */
     @elidable(elidable.ALL)
-    override final def severe(appendee: => Appendee)(
-      implicit log: (Appendee, Level) => Unit) {}
+    override final def severe(logRecord: => LogRecord) {}
   }
 
   /**
@@ -224,7 +210,7 @@ object Filter {
    * lower than off.
    * @see scala.annotation.elidable.OFF
    */
-  object Off extends Off
+  final object Off extends Off
 
   /**
    * @return A Logger filtered out all logs below <code>value</code>.

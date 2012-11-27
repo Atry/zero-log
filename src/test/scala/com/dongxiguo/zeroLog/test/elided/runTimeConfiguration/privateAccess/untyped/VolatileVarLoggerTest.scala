@@ -20,11 +20,11 @@ package runTimeConfiguration.privateAccess.untyped
 
 import com.dongxiguo.zeroLog.Logger
 
-import org.junit._
+import org.junit._; import com.dongxiguo.fastring.Fastring;import Fastring.Implicits._; import language.postfixOps
 import Assert._
 private object VolatileVarLoggerTest {
   @volatile private var logger = com.dongxiguo.zeroLog.runTime.RunTimeZeroLoggerFactory.newLogger(this)._1
-  private val formatter = com.dongxiguo.zeroLog.runTime.RunTimeZeroLoggerFactory.newLogger(this)._2
+  private implicit val (_, formatter, appender) = com.dongxiguo.zeroLog.runTime.RunTimeZeroLoggerFactory.newLogger(this)
   import formatter._
 
   private def doTest(p1: Double, p2: Int) = {
@@ -33,34 +33,34 @@ private object VolatileVarLoggerTest {
     val start = System.nanoTime()
     while(i < 1000) {
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       logger.finest(
-        { (_: StringBuilder) append "Hello, World!" append start append "blahblah" append i append p1 append "\n" append p2 append "blahblah" } ->
+        fast"Hello, World!${start}blahblah$i${p1}\n${p2}blahblah" ->
         e)
       i += 1
     }

@@ -18,16 +18,16 @@
 package com.dongxiguo.zeroLog
 import scala.annotation.elidable
 
-sealed abstract class Level(value: Int) {
-  val name = toString.toUpperCase
+sealed abstract class Level(final val value: Int) {
+  final val name = toString.toUpperCase
 }
 
-object Level {
-  case object Finest extends Level(elidable.FINEST)
-  case object Finer extends Level(elidable.FINER)
-  case object Fine extends Level(elidable.FINE)
-  case object Config extends Level(elidable.CONFIG)
-  case object Info extends Level(elidable.INFO)
-  case object Warning extends Level(elidable.WARNING)
-  case object Severe extends Level(elidable.SEVERE)
+final object Level {
+  final case object Finest extends Level(elidable.FINEST)
+  final case object Finer extends Level(elidable.FINER)
+  final case object Fine extends Level(elidable.FINE)
+  final case object Config extends Level(elidable.CONFIG)
+  final case object Info extends Level(elidable.INFO)
+  final case object Warning extends Level(elidable.WARNING)
+  final case object Severe extends Level(elidable.SEVERE)
 }

@@ -20,29 +20,34 @@ package runTime
 
 import java.lang.reflect.Method
 import scala.annotation.tailrec
+import com.dongxiguo.fastring.Fastring
+import com.dongxiguo.fastring.Fastring.Implicits._
 
 private[runTime] object ReflectUtils {
   // Eat my own dog food
-  private val (logger, formatter) = ZeroLoggerFactory.newLogger(this)
+  implicit private val (logger, formatter, appender) = ZeroLoggerFactory.newLogger(this)
   import formatter._
 
-  private val ParentPackagePattern = """^(?:(.*)\.|)\w+$"""r
+  private val ParentPackagePattern = """^(?:(.*)\.|)\w+$""".r
 
   @tailrec
   final def searchClass(packageName: String,
-                        className: String): Class[_] = {
+    className: String): Class[_] = {
     packageName match {
       case null | "" =>
         Class.forName(className)
       case ParentPackagePattern(parentPackageName) =>
-        try {
-          return Class.forName(packageName + "." + className)
+        (try {
+          Some(Class.forName(packageName + "." + className))
         } catch {
-          case e: ClassNotFoundException =>
-            logger.finer{ _ ++= packageName += '.' ++= className ++=
-                         " is not found.  Will try its parent." }
+          case e: ClassNotFoundException => None
+        }) match {
+          case None => {
+            logger.finer(fast"$packageName.$className is not found.  Will try its parent.")
+            searchClass(parentPackageName, className)
+          }
+          case Some(found) => found
         }
-        return searchClass(parentPackageName, className)
       case _ =>
         throw new IllegalArgumentException("Bad package name: " + packageName)
     }
@@ -61,7 +66,6 @@ private[runTime] object ReflectUtils {
       addAllSuper(builder, i)
   }
 
-
   private def getAllSuper(c: Class[_]): Set[Class[_]] = {
     val builder = Set.newBuilder[Class[_]]
     addAllSuper(builder, c)
@@ -73,14 +77,14 @@ private[runTime] object ReflectUtils {
     parameterTypes: Class[_]*): Method = {
     clazz.getMethods filter { m =>
       m.getName == methodName &&
-      m.getParameterTypes.corresponds(parameterTypes) {
-        (declearing, expected) =>
-        if (declearing == expected) {
-          return m // perfect matching
-        } else {
-          declearing.isAssignableFrom(expected)
+        m.getParameterTypes.corresponds(parameterTypes) {
+          (declearing, expected) =>
+            if (declearing == expected) {
+              return m // perfect matching
+            } else {
+              declearing.isAssignableFrom(expected)
+            }
         }
-      }
     } match {
       case Array() =>
         throw new NoSuchMethodException(
@@ -95,10 +99,7 @@ private[runTime] object ReflectUtils {
   final def invokeStatic(
     packageName: String, className: String, methodName: String,
     parameter: AnyRef): AnyRef = {
-    logger.fine {
-      _ ++= "Invoke static method by reflection: " ++=
-        className += '.' ++= methodName += '(' ++= parameter.toString ++=
-        ") at " ++= packageName += '.' }
+    logger.fine(fast"Invoke static method by reflection: $className.$methodName($parameter) at $packageName.")
     findBestMatchingStaticMethod(
       searchClass(packageName, className),
       methodName,

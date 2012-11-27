@@ -17,11 +17,11 @@
 
 import com.dongxiguo.zeroLog.Filter
 import com.dongxiguo.zeroLog.formatters.SimpleFormatter
-import scala.util.logging.ConsoleLogger
+import com.dongxiguo.zeroLog.appenders.ConsoleAppender
 
 package com.dongxiguo.zeroLog {
   private[zeroLog] object ZeroLoggerFactory {
     def newLogger(singleton: Singleton) =
-      (Filter.Info, new SimpleFormatter(singleton) with ConsoleLogger)
+      (Filter.Info, SimpleFormatter, ConsoleAppender)
   }
 }
