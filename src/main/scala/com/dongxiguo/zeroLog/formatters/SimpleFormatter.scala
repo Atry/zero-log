@@ -101,7 +101,7 @@ final object SimpleFormatter extends Formatter {
     def methodName = currentMethodNameOption.getOrElse("<init>")
     @inline
     def sourceName = new java.io.File(currentSource.get).getName
-    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message"
+    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message${Platform.EOL}"
   }
 
   override final def format[A](

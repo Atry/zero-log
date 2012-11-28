@@ -1,28 +1,27 @@
 // vim: expandtab shiftwidth=2 softtabstop=2 syntax=scala
 
-name := "zero-log"
+name := "context"
 
-organization := "com.dongxiguo"
+organization := "com.dongxiguo.zero-log"
 
 organizationHomepage := None
 
 libraryDependencies <+= scalaVersion { sv =>
   "org.scala-lang" % "scala-reflect" % sv
-}
-
-libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.0"
+} 
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-crossScalaVersions := Seq("2.10.0-RC3")
+crossScalaVersions :=
+  Seq("2.10.0-RC1")
 
-version := "0.3.1"
+version := "0.2.0-SNAPSHOT"
 
 scalacOptions += "-deprecation"
 
-scalacOptions += "-unchecked"
-
 scalacOptions += "-feature"
+
+scalacOptions += "-unchecked"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
