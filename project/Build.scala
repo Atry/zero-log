@@ -6,6 +6,6 @@ object ZeroLogBuild extends Build {
     Project(id = "context", base = file("context"))
 
   lazy val root =
-    Project(id = "root", base = file(".")).dependsOn(context)
+    Project(id = "root", base = file(".")).dependsOn(context).aggregate(context)
 }
 // vim: set softtabstop=2 shiftwidth=2 expandtab:
