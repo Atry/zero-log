@@ -15,7 +15,7 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->defau
 crossScalaVersions :=
   Seq("2.10.0-RC1")
 
-version := "0.3.3-SNAPSHOT"
+version := "0.3.3"
 
 scalacOptions += "-deprecation"
 
