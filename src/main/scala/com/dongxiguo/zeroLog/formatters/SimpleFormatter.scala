@@ -90,6 +90,14 @@ final object SimpleFormatter extends Formatter {
     }"
   }
 
+  @inline
+  private def currentMethodToString(currentMethodNameOption: Option[CurrentMethodName]) = {
+    currentMethodNameOption match {
+      case None => "<init>"
+      case Some(name) => name.get
+    }
+  }
+
   override final def format(
     level: Level,
     message: Fastring,
@@ -97,11 +105,7 @@ final object SimpleFormatter extends Formatter {
     currentLine: CurrentLine,
     currentClass: CurrentClass,
     currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
-    @inline
-    def methodName = currentMethodNameOption.getOrElse("<init>")
-    @inline
-    def sourceName = new java.io.File(currentSource.get).getName
-    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message${Platform.EOL}"
+    fast"$now ${new java.io.File(currentSource.get).getName}:${currentLine.get} ${currentMethodToString(currentMethodNameOption)} ${Platform.EOL}${level.name}: $message${Platform.EOL}"
   }
 
   override final def format[A](
@@ -112,11 +116,7 @@ final object SimpleFormatter extends Formatter {
     currentLine: CurrentLine,
     currentClass: CurrentClass,
     currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
-    @inline
-    def methodName = currentMethodNameOption.getOrElse("<init>")
-    @inline
-    def sourceName = new java.io.File(currentSource.get).getName
-    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: $message ${new PrintThrowable(throwable)}"
+    fast"$now ${new java.io.File(currentSource.get).getName}:${currentLine.get} ${currentMethodToString(currentMethodNameOption)} ${Platform.EOL}${level.name}: $message ${new PrintThrowable(throwable)}"
   }
 
   override final def format(
@@ -126,11 +126,7 @@ final object SimpleFormatter extends Formatter {
     currentLine: CurrentLine,
     currentClass: CurrentClass,
     currentMethodNameOption: Option[CurrentMethodName]): Fastring = {
-    @inline
-    def methodName = currentMethodNameOption.getOrElse("<init>")
-    @inline
-    def sourceName = new java.io.File(currentSource.get).getName
-    fast"$now $sourceName:${currentLine.get} $methodName ${Platform.EOL}${level.name}: ${new PrintThrowable(throwable)}"
+    fast"$now ${new java.io.File(currentSource.get).getName}:${currentLine.get} ${currentMethodToString(currentMethodNameOption)} ${Platform.EOL}${level.name}: ${new PrintThrowable(throwable)}"
   }
 
 }
