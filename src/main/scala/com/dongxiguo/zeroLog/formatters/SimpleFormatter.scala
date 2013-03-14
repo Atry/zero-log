@@ -82,10 +82,10 @@ final object SimpleFormatter extends Formatter {
     }-${
       get(DATE).filled(2, '0')
     } ${
-      get(HOUR_OF_DAY).filled(2, ':')
-    }-${
-      get(MINUTE).filled(2, ':')
-    }-${
+      get(HOUR_OF_DAY).filled(2, '0')
+    }:${
+      get(MINUTE).filled(2, '0')
+    }:${
       get(SECOND).filled(2, '0')
     }"
   }
