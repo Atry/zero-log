@@ -25,9 +25,8 @@ object CurrentMethodName {
       case null =>
         c.Expr(c.parse("implicitly[_root_.com.dongxiguo.zeroLog.context.CurrentMethodName]"))
       case currentDefTree: DefTree =>
-        c.Expr(
-          New(typeOf[CurrentMethodName],
-            Literal(Constant(currentDefTree.name.decoded))))
+        val nameExpr = c.Expr(Literal(Constant(currentDefTree.name.decoded)))
+        reify(new _root_.com.dongxiguo.zeroLog.context.CurrentMethodName(nameExpr.splice))
     }
   }
 
@@ -37,12 +36,10 @@ object CurrentMethodName {
     import c.universe._
     c.enclosingMethod match {
       case null =>
-        reify(None)
+        reify(_root_.scala.None)
       case currentDefTree: DefTree =>
-        c.Expr(
-          New(typeOf[Some[CurrentMethodName]],
-            New(typeOf[CurrentMethodName],
-              Literal(Constant(currentDefTree.name.decoded)))))
+        val nameExpr = c.Expr(Literal(Constant(currentDefTree.name.decoded)))
+        reify(_root_.scala.Some(new _root_.com.dongxiguo.zeroLog.context.CurrentMethodName(nameExpr.splice)))
     }
   }
 

@@ -5,7 +5,6 @@ import language.experimental.macros
 sealed trait NoCurrentMethod
 
 object NoCurrentMethod {
-  final case object NoCurrentMethod
 
   final def noCurrentMethod_impl(c: scala.reflect.macros.Context) = {
     import c.universe._

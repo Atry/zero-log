@@ -8,9 +8,8 @@ object CurrentSource {
 
   final def currentSource_impl(c: scala.reflect.macros.Context) = {
     import c.universe._
-    c.Expr(New(
-      typeOf[CurrentSource],
-      Literal(Constant(c.enclosingPosition.source.path))))
+    val sourceExpr = c.Expr(Literal(Constant(c.enclosingPosition.source.path)))
+    reify(new _root_.com.dongxiguo.zeroLog.context.CurrentSource(sourceExpr.splice))
   }
   implicit final def currentSource: CurrentSource = macro currentSource_impl
 
