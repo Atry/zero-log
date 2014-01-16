@@ -25,11 +25,16 @@ scalacOptions += "-unchecked"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
 
-publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
-  if (isSnapshot)
-    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") 
-  else
-    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+publishTo <<= (isSnapshot, publishTo) { (isSnapshot, publishTo) =>
+  publishTo match {
+    case None => {
+      if (isSnapshot)
+        Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") 
+      else
+        Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
+    }
+    case some => some
+  }
 }
 
 licenses := Seq(
