@@ -10,13 +10,13 @@ libraryDependencies <+= scalaVersion { sv =>
   "org.scala-lang" % "scala-reflect" % sv
 }
 
-libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.1"
+libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.2"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-crossScalaVersions := Seq("2.10.1")
+crossScalaVersions := Seq("2.10.3")
 
-version := "0.3.4-SNAPSHOT"
+version := "0.3.4"
 
 scalacOptions += "-deprecation"
 
