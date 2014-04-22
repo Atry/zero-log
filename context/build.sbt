@@ -13,7 +13,7 @@ libraryDependencies <+= scalaVersion { sv =>
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
 crossScalaVersions :=
-  Seq("2.10.0-RC1")
+  Seq("2.10.4", "2.11.0")
 
 version := "0.3.6-SNAPSHOT"
 
