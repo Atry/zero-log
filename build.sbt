@@ -18,7 +18,7 @@ incOptions := incOptions.value.withNameHashing(true)
 
 crossScalaVersions := Seq("2.10.4", "2.11.0")
 
-version := "0.3.5"
+version := "0.3.6-SNAPSHOT"
 
 scalacOptions <++= (scalaVersion) map { sv =>
   if (sv.startsWith("2.10.")) {
