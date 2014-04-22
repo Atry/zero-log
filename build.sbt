@@ -10,15 +10,23 @@ libraryDependencies <+= scalaVersion { sv =>
   "org.scala-lang" % "scala-reflect" % sv
 }
 
-libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.2"
+libraryDependencies += "com.dongxiguo" %% "fastring" % "0.2.4"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
 
-crossScalaVersions := Seq("2.10.3")
+incOptions := incOptions.value.withNameHashing(true)
 
-version := "0.3.5-SNAPSHOT"
+crossScalaVersions := Seq("2.10.4", "2.11.0")
 
-scalacOptions += "-deprecation"
+version := "0.3.5"
+
+scalacOptions <++= (scalaVersion) map { sv =>
+  if (sv.startsWith("2.10.")) {
+    Seq("-deprecation") // Fully compatible with 2.10.x 
+  } else {
+    Seq() // May use deprecated API in 2.11.x
+  }
+}
 
 scalacOptions += "-unchecked"
 
