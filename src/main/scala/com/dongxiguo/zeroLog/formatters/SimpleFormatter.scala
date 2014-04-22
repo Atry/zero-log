@@ -23,7 +23,6 @@ import java.io.Writer
 import java.util.Calendar
 import scala.compat.Platform
 import scala.language.implicitConversions
-import scala.util.logging.Logged
 import com.dongxiguo.zeroLog.context.CurrentClass
 import com.dongxiguo.zeroLog.context.CurrentLine
 import com.dongxiguo.zeroLog.context.CurrentMethodName
