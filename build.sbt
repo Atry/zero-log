@@ -16,9 +16,9 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->defau
 
 incOptions := incOptions.value.withNameHashing(true)
 
-crossScalaVersions := Seq("2.10.4", "2.11.0")
+crossScalaVersions := Seq("2.10.4", "2.11.2")
 
-version := "0.3.6-SNAPSHOT"
+version := "0.3.6"
 
 scalacOptions <++= (scalaVersion) map { sv =>
   if (sv.startsWith("2.10.")) {
