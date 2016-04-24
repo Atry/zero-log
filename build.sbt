@@ -23,6 +23,8 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->defau
 
 incOptions := incOptions.value.withNameHashing(true)
 
+releasePublishArtifactsAction := PgpKeys.publishSigned.value
+
 releaseCrossBuild := true
 
 crossScalaVersions := Seq("2.10.4", "2.11.2")
