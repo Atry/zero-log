@@ -12,7 +12,7 @@ before_cache:
 language: scala
 
 script:
-  - sbt test
+  - sbt +test
 
 before_deploy:
   - travis_retry git clone --depth=1 $secret_git ./secret
