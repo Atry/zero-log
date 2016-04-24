@@ -27,7 +27,7 @@ releasePublishArtifactsAction := PgpKeys.publishSigned.value
 
 releaseCrossBuild := true
 
-crossScalaVersions := Seq("2.10.4", "2.11.2")
+crossScalaVersions := Seq("2.10.4", "2.11.8")
 
 scalacOptions <++= (scalaVersion) map { sv =>
   if (sv.startsWith("2.10.")) {
