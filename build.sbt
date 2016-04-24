@@ -1,5 +1,12 @@
 // vim: expandtab shiftwidth=2 softtabstop=2 syntax=scala
 
+lazy val context =
+  Project(id = "context", base = file("context"))
+
+lazy val root =
+  Project(id = "root", base = file(".")).dependsOn(context).aggregate(context)
+
+
 name := "zero-log"
 
 organization := "com.dongxiguo"
@@ -16,9 +23,9 @@ libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->defau
 
 incOptions := incOptions.value.withNameHashing(true)
 
-crossScalaVersions := Seq("2.10.4", "2.11.2")
+releaseCrossBuild := true
 
-version := "0.3.7-SNAPSHOT"
+crossScalaVersions := Seq("2.10.4", "2.11.2")
 
 scalacOptions <++= (scalaVersion) map { sv =>
   if (sv.startsWith("2.10.")) {
@@ -27,6 +34,8 @@ scalacOptions <++= (scalaVersion) map { sv =>
     Seq() // May use deprecated API in 2.11.x
   }
 }
+
+startYear := Some(2011)
 
 scalacOptions += "-unchecked"
 
@@ -45,49 +54,23 @@ licenses := Seq(
   "Apache License, Version 2.0" ->
   url("http://www.apache.org/licenses/LICENSE-2.0.html"))
 
+scmInfo := Some(ScmInfo(
+  url(raw"""https://github.com/ThoughtWorksInc/${name.value}"""),
+  raw"""scm:git:https://github.com/ThoughtWorksInc/${name.value}.git""",
+  Some(raw"""scm:git:git@github.com:ThoughtWorksInc/${name.value}.git""")))
+
 homepage := Some(url("https://code.google.com/p/zero-log/"))
 
-pomExtra <<= scalaVersion { sv =>
-  <scm>
-    <url>https://code.google.com/p/zero-log/source/browse</url>
-    <connection>scm:hg:https://code.google.com/p/zero-log/</connection>
-  </scm>
-  <developers>
-    <developer>
-      <id>Atry</id>
-      <name>杨博</name>
-    </developer>
-  </developers>
-  <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <scala.version>{sv}</scala.version>
-  </properties>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.scala-tools</groupId>
-        <artifactId>maven-scala-plugin</artifactId>
-        <version>2.15.2</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>compile</goal>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
-        </executions>
-        <configuration>
-          <recompileMode>modified-only</recompileMode>
-          <args>
-            <arg>-Xelide-below</arg>
-            <arg>FINEST</arg>
-            <arg>-deprecation</arg>
-          </args>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
-}
+developers in ThisBuild := List(
+  Developer(
+    "Atry",
+    "杨博 (Yang Bo)",
+    "pop.atry@gmail.com",
+    url("https://github.com/Atry")
+  )
+)
+
+import ReleaseTransformations._
 
 releaseProcess := {
   releaseProcess.value.patch(releaseProcess.value.indexOf(pushChanges), Seq[ReleaseStep](releaseStepCommand("sonatypeRelease")), 0)
