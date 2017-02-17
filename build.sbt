@@ -1,11 +1,8 @@
 // vim: expandtab shiftwidth=2 softtabstop=2 syntax=scala
 
-lazy val context =
-  Project(id = "context", base = file("context"))
+lazy val context = project
 
-lazy val root =
-  Project(id = "root", base = file(".")).dependsOn(context).aggregate(context)
-
+dependsOn(context)
 
 name := "zero-log"
 
@@ -44,40 +41,3 @@ scalacOptions += "-unchecked"
 scalacOptions += "-feature"
 
 scalacOptions ++= Seq("-Xelide-below", "FINEST")
-
-publishTo <<= (isSnapshot) { isSnapshot: Boolean =>
-  if (isSnapshot)
-    Some("snapshots" at "https://oss.sonatype.org/content/repositories/snapshots") 
-  else
-    Some("releases" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
-}
-
-licenses := Seq(
-  "Apache License, Version 2.0" ->
-  url("http://www.apache.org/licenses/LICENSE-2.0.html"))
-
-scmInfo := Some(ScmInfo(
-  url(raw"""https://github.com/ThoughtWorksInc/${name.value}"""),
-  raw"""scm:git:https://github.com/ThoughtWorksInc/${name.value}.git""",
-  Some(raw"""scm:git:git@github.com:ThoughtWorksInc/${name.value}.git""")))
-
-homepage := Some(url("https://code.google.com/p/zero-log/"))
-
-developers in ThisBuild := List(
-  Developer(
-    "Atry",
-    "杨博 (Yang Bo)",
-    "pop.atry@gmail.com",
-    url("https://github.com/Atry")
-  )
-)
-
-import ReleaseTransformations._
-
-releaseProcess := {
-  releaseProcess.value.patch(releaseProcess.value.indexOf(pushChanges), Seq[ReleaseStep](releaseStepCommand("sonatypeRelease")), 0)
-}
-
-releaseProcess -= runClean
-
-releaseProcess -= runTest
