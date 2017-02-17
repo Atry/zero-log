@@ -8,8 +8,6 @@ name := "zero-log"
 
 organization := "com.dongxiguo"
 
-organizationHomepage := None
-
 libraryDependencies <+= scalaVersion { sv =>
   "org.scala-lang" % "scala-reflect" % sv
 }
@@ -17,12 +15,6 @@ libraryDependencies <+= scalaVersion { sv =>
 libraryDependencies += "com.dongxiguo" %% "fastring" % "0.3.1"
 
 libraryDependencies += "com.novocode" % "junit-interface" % "0.7" % "test->default"
-
-incOptions := incOptions.value.withNameHashing(true)
-
-releasePublishArtifactsAction := PgpKeys.publishSigned.value
-
-releaseCrossBuild := true
 
 crossScalaVersions := Seq("2.10.6", "2.11.8", "2.12.1")
 
