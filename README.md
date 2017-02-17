@@ -4,7 +4,7 @@
   * Zero cost if the log is disabled by compile-time configuration.
   * Zero XML or Propertis files you need to write.
   * 10+ times faster for string formatting than any other Java logging libraries (log4j, logback, ...).
-  * Support `@scala.annotation.elidable` and `scala.util.logging.Logged`.
+  * Support `@scala.annotation.elidable`.
 
 For more comparation, see [log4j VS zero-log](https://github.com/Atry/zero-log/wiki/Log4jVsZeroLog).
 
